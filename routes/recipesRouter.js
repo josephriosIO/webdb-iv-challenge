@@ -25,26 +25,14 @@ recipesRoute.get("/", async (request, response) => {
   }
 });
 
-recipesRoute.get("/:recipeId", async (request, response) => {
-  const recipeId = request.params.recipeId;
+recipesRoute.get("/:id", async (request, response) => {
+  const recipeId = request.params.id;
   try {
     const recipe = await databaseAccess.getRecipe(recipeId);
     response.status(200).json(recipe);
   } catch (error) {
     response.status(500).json({
-      errorMessage: "Could not retrieve Recipe from database."
-    });
-  }
-});
-
-recipesRoute.get("/:recipeId/shoppinglist", async (request, response) => {
-  const recipeId = request.params.recipeId;
-  try {
-    const shoppingList = await databaseAccess.getShoppingList(recipeId);
-    response.status(200).json(shoppingList);
-  } catch (error) {
-    response.status(500).json({
-      errorMessage: "Could not find Recipe's Shopping List in database."
+      errorMessage: error.message
     });
   }
 });

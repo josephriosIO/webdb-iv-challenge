@@ -7,13 +7,10 @@ const getRecipe = async id => {
     .where("recipes.id", id)
     .first();
 
-  const ingredients = await db("recipes_ingredients")
-    .join("ingredients", "recipes_ingredients.ingredient_id", "ingredients.id")
-    .select(
-      "ingredients.name as ingredient_name",
-      "recipes_ingredients.quantity"
-    )
-    .where("recipes_ingredients.recipe_id", id);
+  const ingredients = await db("recipe_ingredents")
+    .join("ingredents", "recipe_ingredents.ingredent_id", "ingredents.id")
+    .select("ingredents.name as ingredent_name", "recipe_ingredents.quantity")
+    .where("recipe_ingredents.recipe_id", id);
 
   return {
     ...recipe,
