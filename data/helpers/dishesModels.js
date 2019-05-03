@@ -1,10 +1,5 @@
 const db = require("../dbConfig.js");
-
-module.exports = {
-  getDishes,
-  addDish,
-  getDish
-};
+const recipeDb = require("./recipesModels");
 
 function getDishes() {
   return db("dishes");
@@ -18,14 +13,20 @@ function addDish(dish) {
     });
 }
 
-function getDish(id) {
-  return db("dishes")
-    .join("recipes", "recipes.dish_id", "dishes.id")
-    .select(
-      "dishes.id as dish_id",
-      "dishes.name as dish_name",
-      "recipes.name as recipe_name"
-    )
-    .where("dishes.id", id)
+const getDish = async id => {
+  // TODO: Too many database request
+  const dish = await getDishes()
+    .where({ id })
     .first();
-}
+  const recipes = await recipeDb.getRecipes().where({ dish_id: id });
+  return {
+    ...dish,
+    recipes
+  };
+};
+
+module.exports = {
+  getDishes,
+  addDish,
+  getDish
+};
