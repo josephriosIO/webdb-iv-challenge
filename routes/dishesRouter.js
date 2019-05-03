@@ -11,4 +11,13 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  try {
+    const addDish = await dishDb.addDish(req.body);
+    res.status(201).json(addDish);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+});
+
 module.exports = router;
